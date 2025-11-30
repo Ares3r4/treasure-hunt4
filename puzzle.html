@@ -191,6 +191,8 @@ function flipCard(card) {
         if (matchedPairs === totalPairs) {
             message.classList.add('show');
             launchConfetti(100);
+            
+            message.style.opacity=1;
         }
     }, 450);
 }
