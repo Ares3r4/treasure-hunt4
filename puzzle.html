@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Christmas Memory Puzzle</title>
 <style>
+/* Body */
 body {
     font-family: "Poppins", sans-serif;
     background: linear-gradient(#b30000, #4d0000);
@@ -11,29 +13,37 @@ body {
     text-align: center;
     padding: 20px;
     overflow-x: hidden;
+    position: relative;
 }
 
-h1 { font-size: 28px; margin-bottom: 10px; }
+/* Heading */
+h1 {
+    font-size: calc(20px + 2vw);
+    margin-bottom: 10px;
+}
 
+/* Game grid */
 #game {
-    width: 320px;
+    width: 90vw;
+    max-width: 400px;
     margin: 20px auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
+    gap: 10px;
     position: relative;
     z-index: 1;
 }
 
+/* Cards */
 .card {
-    width: 70px;
-    height: 70px;
+    width: 100%;
+    aspect-ratio: 1/1;
     background: white;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 32px;
+    font-size: calc(24px + 2vw);
     cursor: pointer;
     user-select: none;
     transform-style: preserve-3d;
@@ -55,16 +65,17 @@ h1 { font-size: 28px; margin-bottom: 10px; }
     border-radius: 10px;
 }
 
-.back { background: white; font-size: 35px; }
-.front { background: #8b0000; transform: rotateY(180deg); font-size: 35px; }
+.back { background: white; font-size: calc(20px + 2vw); }
+.front { background: #8b0000; transform: rotateY(180deg); font-size: calc(24px + 2vw); }
 
+/* Message */
 #message {
     margin-top: 20px;
-    font-size: 24px;
+    font-size: calc(18px + 2vw);
     opacity: 0;
     transition: opacity 0.6s;
     position: relative;
-    z-index: 10;
+    z-index: 9999;
 }
 
 .show {
@@ -90,6 +101,7 @@ h1 { font-size: 28px; margin-bottom: 10px; }
     border-radius: 50%;
     animation: fall 3s linear forwards;
 }
+
 @keyframes fall {
     to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
 }
@@ -123,6 +135,7 @@ h1 { font-size: 28px; margin-bottom: 10px; }
 <div id="message">🎄 Congratulations!<br>➡️ Head to the <b>LIBRARY CAFE</b>!</div>
 
 <script>
+// Card setup
 const icons = ["🎄","🎁","🍪","❄","📘","☕"];
 let cardValues = [...icons, ...icons];
 cardValues.sort(() => Math.random() - 0.5);
@@ -135,7 +148,7 @@ let lockBoard = false;
 let matchedPairs = 0;
 const totalPairs = icons.length;
 
-// Create cards with named click handler
+// Create cards with named click handlers
 cardValues.forEach(icon => {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -144,11 +157,12 @@ cardValues.forEach(icon => {
 
     function clickHandler() { flipCard(card); }
     card.addEventListener('click', clickHandler);
-    card.clickHandler = clickHandler; // store reference for removal
+    card.clickHandler = clickHandler;
 
     game.appendChild(card);
 });
 
+// Flip logic
 function flipCard(card) {
     if (lockBoard || card.classList.contains('flipped')) return;
     card.classList.add('flipped');
@@ -164,7 +178,6 @@ function flipCard(card) {
     setTimeout(() => {
         if (firstCard.dataset.icon === secondCard.dataset.icon) {
             matchedPairs++;
-            // Disable further clicks
             firstCard.removeEventListener('click', firstCard.clickHandler);
             secondCard.removeEventListener('click', secondCard.clickHandler);
         } else {
@@ -178,8 +191,6 @@ function flipCard(card) {
         if (matchedPairs === totalPairs) {
             message.classList.add('show');
             launchConfetti(100);
-            message.style.zIndex=1000;
-            message.style.opacity=1;
         }
     }, 450);
 }
@@ -215,6 +226,7 @@ function createSnowflake() {
     snow.addEventListener('animationend', () => snow.remove());
 }
 setInterval(createSnowflake, 200);
+
 </script>
 
 </body>
